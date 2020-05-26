@@ -317,15 +317,15 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: azure/application-gateway
     appgw.ingress.kubernetes.io/backend-protocol: "https"
-    appgw.ingress.kubernetes.io/backend-hostname: "pgadmin.xxxxx.ca"
+    appgw.ingress.kubernetes.io/backend-hostname: "pg.xxxxx.com"
     appgw.ingress.kubernetes.io/appgw-trusted-root-certificate: "root-cert1"
 spec:
   tls:
   - hosts:
-    - pgadmin.xxxxx.ca
+    - pg.xxxxx.com
     secretName: pgadmin-ingress-portal-tls
   rules:
-  - host: pgadmin.xxxxx.ca
+  - host: pg.xxxxx.com
     http:
       paths:
       - path:
@@ -353,6 +353,14 @@ deployment.apps/pgadmin-prod   1/1     1            1           3h2m
 
 ```
 
+```sh
+kubectl get ingress -n pgadmin
+
+NAME              HOSTS                 ADDRESS         PORTS     AGE
+pgadmin-ingress   pg.xxxxx.com   xxx.xx.xxx.xx   80, 443   165m
+
+
+```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
