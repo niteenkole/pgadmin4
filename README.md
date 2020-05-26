@@ -34,11 +34,12 @@ How to setup pgadmin4 end to end ssl in azure kubernetes cluster behind azure ap
 <!-- GETTING STARTED -->
 ## Getting Started
 
-1.setup PV and PVC
-2.setup secrets
-3.Setup deployment
-3.Setup service
-4.Setup ingress for AGIC
+1.Setup PV and PVC
+2.Setup secrets
+3.Apply root certificate to AGIC
+4.Setup deployment
+5.Setup service
+6.Setup ingress for AGIC
 
 ### Prerequisites
 
@@ -181,9 +182,14 @@ c. TLS secret for ingress.
 ```sh
 kubectl create secret tls pgadmin-ingress-portal-tls -n pgadmin --key="server.key" --cert="server.cert"
 ```
-3. Install NPM packages
+3. Apply root certificate to AGIC
+
+a. Point to subscription where your AGW is running
+
+b. Apply root certificate
+
 ```sh
-npm install
+az network application-gateway root-cert create --cert-file root.cer --gateway-name APPgwname --name root-cert1 --resource-group AGWRG-Name
 ```
 4. Enter your API in `config.js`
 ```JS
