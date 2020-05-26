@@ -279,6 +279,63 @@ spec:
 kubectl create -f pgadmin-deployment-tls-file.yaml -n pgadmin
 ```
 
+5.Setup service
+
+pgadmin-prod-svc.yaml
+
+```sh
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgadmin-svc
+  namespace: pgadmin
+spec:
+  ports:
+  - port: 443
+    targetPort: 443
+    protocol: TCP
+  type: ClusterIP
+  selector:
+    k8s-app: pgadmin-prod
+
+```
+```sh
+kubectl create -f pgadmin-prod-svc.yaml -n pgadmin
+```
+
+6.Setup ingress for AGIC
+
+pgadmin-ingress.yaml
+
+```sh
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: pgadmin-ingress
+  namespace: pgadmin
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+    appgw.ingress.kubernetes.io/backend-protocol: "https"
+    appgw.ingress.kubernetes.io/backend-hostname: "pgadmin.xxxxx.ca"
+    appgw.ingress.kubernetes.io/appgw-trusted-root-certificate: "root-cert1"
+spec:
+  tls:
+  - hosts:
+    - pgadmin.xxxxx.ca
+    secretName: pgadmin-ingress-portal-tls
+  rules:
+  - host: pgadmin.xxxxx.ca
+    http:
+      paths:
+      - path:
+        backend:
+          serviceName: pgadmin-svc
+          servicePort: 443
+
+```
+```sh
+kubectl create -f pgadmin-ingress.yaml -n pgadmin
+```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
