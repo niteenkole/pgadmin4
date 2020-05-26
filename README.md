@@ -275,7 +275,9 @@ spec:
           secretName: pgadmin-ssl-key
 
 ```
-
+```sh
+kubectl create -f pgadmin-deployment-tls-file.yaml -n pgadmin
+```
 
 
 <!-- USAGE EXAMPLES -->
