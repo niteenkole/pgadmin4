@@ -40,6 +40,7 @@ How to setup pgadmin4 end to end ssl in azure kubernetes cluster behind azure ap
 4.Setup deployment
 5.Setup service
 6.Setup ingress for AGIC
+7.Verify
 
 ### Prerequisites
 
@@ -336,6 +337,22 @@ spec:
 ```sh
 kubectl create -f pgadmin-ingress.yaml -n pgadmin
 ```
+7.Verify
+```sh
+kubectl get all -n pgadmin
+
+NAME                                READY   STATUS    RESTARTS   AGE
+pod/pgadmin-prod-7fd8944c75-z5vjk   1/1     Running   0          3h2m
+
+NAME                     TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)         AGE
+service/pgadmin-lb-pvt   LoadBalancer   xxx.xx.xxx.xx   xxx.xx.xxx.xx   443:32450/TCP   3h1m
+service/pgadmin-svc      ClusterIP      xxx.xx.xxx.xx    <none>           443/TCP         19h
+
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/pgadmin-prod   1/1     1            1           3h2m
+
+```
+
 
 <!-- USAGE EXAMPLES -->
 ## Usage
