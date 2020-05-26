@@ -19,6 +19,8 @@
 
 How to setup pgadmin4 end to end ssl in azure kubernetes cluster behind azure application ingress controller AGIC.
 
+pgadmin4 on AKS (azure kubernetes cluster) behind AGIC (application gateway ingress control) with azure file storage as PV
+
 ### Built With
 
 * [pgadmin4](https://www.pgadmin.org/download/pgadmin-4-container/)
