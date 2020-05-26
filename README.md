@@ -177,7 +177,10 @@ CQYDVQQGEwJVUzEWMBQGA1UEChMNRW50cnVzdCwgSW5jLjEoMCYGA1UECxMfU2Vl
 -----END CERTIFICATE-----
 ```
 
-
+c. TLS secret for ingress.
+```sh
+kubectl create secret tls pgadmin-ingress-portal-tls -n pgadmin --key="server.key" --cert="server.cert"
+```
 3. Install NPM packages
 ```sh
 npm install
