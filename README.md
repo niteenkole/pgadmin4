@@ -64,6 +64,11 @@ kubectl create secret generic pgadmin-azure-secret --from-literal=azurestorageac
 d.  Create PersistentVolume
 
 pv-azurefile-mountoptions-pgadmin-var.yaml
+
+```sh
+Note you need ReadWriteMany
+```
+
 ```sh
 apiVersion: v1
 kind: PersistentVolume
@@ -89,7 +94,9 @@ spec:
 
 Note share should exist inside your storage,if not create it
 
+```sh
 kubectl create -f pv-azurefile-mountoptions-pgadmin-var.yaml
+```
 
 kubectl get pv
 NAME                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                               STORAGECLASS   REASON   AGE
