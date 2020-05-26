@@ -98,12 +98,12 @@ kubectl create -f pv-azurefile-mountoptions-pgadmin-var.yaml
 ```
 ```sh
 kubectl get pv
-```
+
 
 NAME                    CAPACITY ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM       STORAGECLASS     REASON             AGE
 
 pv-azurefile-pgadmin-var 20Gi    RWX            Retain           Bound    pgadmin/pvc-azurefile-pgadmin-var               17h
-
+```
 e. Create PersistentVolumeClaim
 
 pvc-azurefile-static-pgadmin-var.yaml
@@ -128,12 +128,12 @@ kubectl create -f pvc-azurefile-static-pgadmin-var.yaml -n pgadmin
 ```
 ```sh
 kubectl get pvc -n pgadmin
-```
+
 NAME                        STATUS   VOLUME                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 
 pvc-azurefile-pgadmin-var   Bound    pv-azurefile-pgadmin-var   20Gi       RWX                           17h
 
-
+```
 
 
 2. setup secrets
