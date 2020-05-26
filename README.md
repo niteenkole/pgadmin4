@@ -102,6 +102,34 @@ kubectl get pv
 NAME                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                               STORAGECLASS   REASON   AGE
 pv-azurefile-pgadmin-var   20Gi       RWX            Retain           Bound    pgadmin/pvc-azurefile-pgadmin-var                           17h
 
+e. Create PersistentVolumeClaim
+
+pvc-azurefile-static-pgadmin-var.yaml
+
+```sh
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-azurefile-pgadmin-var
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: ""
+  volumeName: pv-azurefile-pgadmin-var
+```
+
+```sh
+kubectl create -f pvc-azurefile-static-pgadmin-var.yaml -n pgadmin
+```
+```sh
+kubectl get pvc -n pgadmin
+```
+NAME                        STATUS   VOLUME                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+pvc-azurefile-pgadmin-var   Bound    pv-azurefile-pgadmin-var   20Gi       RWX                           17h
+
 
 
 
