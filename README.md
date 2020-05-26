@@ -191,9 +191,89 @@ b. Apply root certificate
 ```sh
 az network application-gateway root-cert create --cert-file root.cer --gateway-name APPgwname --name root-cert1 --resource-group AGWRG-Name
 ```
-4. Enter your API in `config.js`
-```JS
-const API_KEY = 'ENTER YOUR API';
+4. Setup deployment
+
+pgadmin-deployment-tls-file.yaml
+
+```sh
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: pgadmin-prod
+  namespace: pgadmin
+  labels:
+    k8s-app: pgadmin-prod
+    application-name: pgadmin-prod
+    version-no: "01"
+    owner: niteen_kole
+    env: production
+    release-no: "01"
+    tier: "01"
+    customer-facing: "yes"
+    app-role: web
+    project-id: design
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: pgadmin-prod
+      application-name: pgadmin-prod
+      version-no: "01"
+      owner: niteen_kole
+      env: production
+      release-no: "01"
+      tier: "01"
+      customer-facing: "yes"
+      app-role: web
+      project-id: design
+  template:
+    metadata:
+      name: pgadmin-prod
+      creationTimestamp:
+      labels:
+        k8s-app: pgadmin-prod
+        application-name: pgadmin-prod
+        version-no: "01"
+        owner: niteen_kole
+        env: production
+        release-no: "01"
+        tier: "01"
+        customer-facing: "yes"
+        app-role: web
+        project-id: design
+    spec:
+      containers:
+      - name: pgadmin-prod
+        image: your-registry/pgadmin4:latest
+        volumeMounts:
+        - name: pgadmin-var
+          mountPath: /var/lib/pgadmin
+        - name: pgadmin-cert
+          mountPath: /certs
+        env:
+        - name: PGADMIN_DEFAULT_EMAIL
+          value: "niteen_kole@xxxxx.ca"
+        - name: PGADMIN_DEFAULT_PASSWORD
+          value: "XXXXXXX"
+        - name: PGADMIN_ENABLE_TLS
+          value: "True"
+        - name: PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION
+          value: "False"
+        resources: {}
+        imagePullPolicy: Always
+      imagePullSecrets:
+      - name: pgadmin-pull-secret
+      schedulerName: default-scheduler
+      volumes:
+      - name: pgadmin-var
+        persistentVolumeClaim:
+          claimName: pvc-azurefile-pgadmin-var
+      - name: pgadmin-cert
+        secret:
+          secretName: pgadmin-ssl-key
+
 ```
 
 
