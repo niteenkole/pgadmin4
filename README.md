@@ -35,7 +35,8 @@ How to setup pgadmin4 end to end ssl in azure kubernetes cluster behind azure ap
 ## Getting Started
 
 1.setup PV and PVC
-2.Setup deployment
+2.setup secrets
+3.Setup deployment
 3.Setup service
 4.Setup ingress for AGIC
 
@@ -131,15 +132,52 @@ kubectl create -f pvc-azurefile-static-pgadmin-var.yaml -n pgadmin
 kubectl get pvc -n pgadmin
 ```
 NAME                        STATUS   VOLUME                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+
 pvc-azurefile-pgadmin-var   Bound    pv-azurefile-pgadmin-var   20Gi       RWX                           17h
 
 
 
 
-2. Clone the repo
+2. setup secrets
+
+Note for safe side we use private registry and we dont want pgadmin to pull latest image if container is restared.
+We pull pgadmin4 and push in private registry.
+
+a.Image pull secret
 ```sh
-git clone https://github.com/your_username_/Project-Name.git
+kubectl --namespace pgadmin create secret docker-registry pgadmin-pull-secret --docker-server=xx.xx.xx --docker-username=abcd --docker-password=Hxxxxxxbinxxx8O --docker-email=niteen_kole@xxxxxx.ca
 ```
+b. pgadmin ssl certificate secret.
+```sh
+kubectl create secret generic pgadmin-ssl-key --from-file=/certs/server.key  --from-file=/certs/server.cert -n pgadmin
+```
+Note your server.cert should include all server,root and intermidiate 
+
+example.
+```sh
+cat server.cert
+
+-----BEGIN CERTIFICATE-----
+MIIHTTCCBjWgAwIBAgIRAMHZwo2wytiNAAAAAFDzaT0wDQYJKoZIhvcNAQELBQAw
+gboxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1FbnRydXN0LCBJbmMuMSgwJgYDVQQL
+....
+....
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIIEPjCCAyagAwIBAgIESlOMKDANBgkqhkiG9w0BAQsFADCBvjELMAkGA1UEBhMC
+VVMxFjAUBgNVBAoTDUVudHJ1c3QsIEluYy4xKDAmBgNVBAsTH1NlZSB3d3cuZW50
+....
+....
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIIFDjCCA/agAwIBAgIMDulMwwAAAABR03eFMA0GCSqGSIb3DQEBCwUAMIG+MQsw
+CQYDVQQGEwJVUzEWMBQGA1UEChMNRW50cnVzdCwgSW5jLjEoMCYGA1UECxMfU2Vl
+....
+....
+-----END CERTIFICATE-----
+```
+
+
 3. Install NPM packages
 ```sh
 npm install
